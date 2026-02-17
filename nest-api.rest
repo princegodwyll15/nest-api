@@ -1,0 +1,35 @@
+# Users
+GET http://localhost:3000/users
+
+###
+POST  http://localhost:3000/auth/signup
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "Abigail Godwyll",
+    "email": "abigailgodwyll@gmail.com",
+    "password": "12345678"
+}
+
+###
+POST http://localhost:3000/otp/verify/signup
+Content-Type: application/json
+
+{
+  "userId": "cmlmygzlk0000kpn63jfgokpu",
+  "code": "229734"
+}
+
+###
+GET http://localhost:3000
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "godwyllprince@gmail.com",
+    "password": "12345678"
+}

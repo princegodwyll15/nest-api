@@ -1,0 +1,17 @@
+{
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "ssl": {
+          "rejectUnauthorized": true
+        }
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "driver": "PostgreSQL",
+      "name": "nest-api",
+      "connectString": "postgres://cd5262c07fe3e5903fe23ccdbf32ceca463eddf94fef83c2a7849dad1277fad9:sk_-_2uSd6btWXfVDUbqI5TW@db.prisma.io:5432/postgres?sslmode=require"
+    }
+  ]
+}
