@@ -1,1 +1,1 @@
-SELECT * FROM "OTP";
+DELETE FROM "User"

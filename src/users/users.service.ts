@@ -1,4 +1,8 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -27,28 +31,49 @@ export class UsersService {
     return user?.isVerified || false;
   }
 
-  async saveRefreshToken(token: string, userId: string): Promise<void> {
+  async saveRefreshToken(token: string, userId: string): Promise<string> {
     console.log('Saving refresh token for user:', userId);
     await this.prisma.refreshToken.create({
       data: {
         token,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
         userId,
       },
     });
-  }
-
-  async getRefreshToken(userId: string): Promise<string | null> {
-    const refreshToken = await this.prisma.refreshToken.findFirst({
-      where: {
-        userId,
-      },
-    });
-    return refreshToken?.token || null;
+    return token;
   }
 
   findAll() {
     return this.prisma.user.findMany();
+  }
+
+  async findValidRefreshToken(userId: string): Promise<string> {
+    console.log('Finding and checking refresh token for user:', userId);
+    const timeOfRequestingRefreshToken = new Date();
+    const refreshToken = await this.prisma.refreshToken.findFirst({
+      where: {
+        userId,
+        expiresAt: {
+          gt: timeOfRequestingRefreshToken, // Not expired yet
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!refreshToken) {
+      throw new NotFoundException('Refresh token not found');
+    }
+
+    // Check if difference between expiresAt and now is <= 7 days
+    const timeDiff =
+      refreshToken.expiresAt.getTime() - timeOfRequestingRefreshToken.getTime();
+    const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+    if (daysDiff > 7) {
+      throw new ConflictException('Expired token');
+    }
+    return refreshToken.token;
   }
 
   findOneByEmail(email: string) {

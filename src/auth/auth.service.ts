@@ -51,6 +51,7 @@ export class AuthService {
     //sign tokens
     const accessToken =
       await this.jwtService.signAccessToken(accessTokenPayload);
+    //sign and save refresh token
     const refreshToken = await this.jwtService.signRefreshToken(
       refreshTokenPayload,
       user.id,
@@ -112,17 +113,28 @@ export class AuthService {
       sub: user.id,
       email: user.email,
     });
+    //find refresh token if not expired for this user
+    const refreshRecord = await this.userService.findValidRefreshToken(user.id);
+    if (!refreshRecord) {
+      //user data with token
+      const { password, ...safeUser } = user;
+      console.log('User data with token:', safeUser);
+      console.log('User id:', user.id);
+      console.log('Refresh record:', refreshRecord);
 
-    //generate refresh token
-    const refreshToken = await this.jwtService.signRefreshToken(
-      {
-        userId: user.id,
-      },
-      user.id,
-    );
-
-    //save refresh token
-    await this.userService.saveRefreshToken(refreshToken, user.id);
+      //generate and save a new refresh token
+      const newRefreshToken = await this.jwtService.signRefreshToken(
+        {
+          userId: user.id,
+        },
+        user.id,
+      );
+      return {
+        user: safeUser,
+        accessToken,
+        refreshToken: newRefreshToken,
+      };
+    }
 
     //user data with token
     const { password, ...safeUser } = user;
@@ -130,7 +142,7 @@ export class AuthService {
     return {
       user: safeUser,
       accessToken,
-      refreshToken,
+      refreshToken: refreshRecord,
     };
   }
 

@@ -7,8 +7,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "username": "Abigail Godwyll",
-    "email": "abigailgodwyll@gmail.com",
+    "username": "Prince Godwyll",
+    "email": "godwyllprince@gmail.com",
     "password": "12345678"
 }
 
@@ -17,8 +17,8 @@ POST http://localhost:3000/otp/verify/signup
 Content-Type: application/json
 
 {
-  "userId": "cmlmygzlk0000kpn63jfgokpu",
-  "code": "229734"
+  "userId": "cmluqaenw00009xn6afoobldw",
+  "code": "273411"
 }
 
 ###
@@ -33,3 +33,10 @@ Accept: application/json
     "email": "godwyllprince@gmail.com",
     "password": "12345678"
 }
+
+
+###
+GET http://localhost:3000/auth/profile/cmlmygzlk0000kpn63jfgokpu
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer 

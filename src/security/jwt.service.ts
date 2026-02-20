@@ -41,7 +41,7 @@ export class JwtService {
     //sign token
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: '1d',
+      expiresIn: '7d',
     });
     const hashedToken = await this.passwordService.hashPassword(refreshToken);
     //save hashed refresh token to db
@@ -53,8 +53,9 @@ export class JwtService {
     token: string,
     userId: string,
   ): Promise<JwtPayloadDto> {
-    //get user by id
-    const getRefreshToken = await this.userService.getRefreshToken(userId);
+    //get refresh token from db for this user using their id
+    const getRefreshToken =
+      await this.userService.findValidRefreshToken(userId);
     if (!getRefreshToken) {
       throw new ConflictException('Token not found');
     }
