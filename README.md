@@ -4,7 +4,7 @@
 
 {This software is a backend service that allows users to create, verify and manage their accounts. It issues a token for authentication and authorization. provides otp after signup to verify individuals account which is saved in db for consistency and expiry checks.}
 
-[Software Demo Video](https://www.loom.com/share/7b2f6860d36b40ce828a5c87019f7aab)
+[Software Demo Video](https://www.loom.com/share/8519ebee87c44a53950dfc7faa3aeb03)
 
 # Development Environment
 

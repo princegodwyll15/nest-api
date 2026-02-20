@@ -58,6 +58,7 @@ export class AuthService {
     );
     //generate otp
     const otp = this.otpService.generateOtp();
+    await this.otpService.saveOtp(user.id, otp);
     //send email
     await this.MailService.sendEmail(user.email, user.name, otp);
 

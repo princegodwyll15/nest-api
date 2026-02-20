@@ -17,8 +17,8 @@ POST http://localhost:3000/otp/verify/signup
 Content-Type: application/json
 
 {
-  "userId": "cmluqaenw00009xn6afoobldw",
-  "code": "273411"
+  "userId": "cmluz63ls0000r0n6n0zmfp0x",
+  "code": "846042"
 }
 
 ###
